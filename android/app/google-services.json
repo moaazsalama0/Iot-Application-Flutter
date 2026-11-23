@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "60014844362",
+    "firebase_url": "https://iosphere-643dc-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "iosphere-643dc",
+    "storage_bucket": "iosphere-643dc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60014844362:android:08e9a102492fdb1eb81733",
+        "android_client_info": {
+          "package_name": "com.iosphere.iosphere"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt9rUAe91phlhTpteRbvuiyj2ea2bQysM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
