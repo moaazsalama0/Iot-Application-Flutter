@@ -1,28 +1,48 @@
 {
   "devices": {
-    "climate_module": {
-      "info": { "name": "Smart Climate", "owner": "Example", "type": "climate", "firmware": "1.0.0" },
-      "sensors": { "temperature": 27.4, "humidity": 51 },
-      "actuators": { "fan": "OFF", "led": "ON" },
-      "commands": { "fan": "OFF", "led": "ON" },
-      "settings": { "autoMode": true, "tempThreshold": 35 },
+    "pedestrian_module": {
+      "info": { "name": "Pedestrian Crossing", "owner": "Example", "type": "pedestrian", "firmware": "1.0.0" },
+      "sensors": { "crossRequest": false, "pedestrianDetected": true },
+      "actuators": { "walkSignal": "WALK" },
+      "commands": { "walkSignal": "STOP" },
+      "settings": { "autoMode": true, "crossingTime": 10 },
+      "status": { "lastSeen": 1795000000000, "rssi": -58 }
+    },
+    "lighting_module": {
+      "info": { "name": "Smart Street Lighting", "owner": "Example", "type": "lighting", "firmware": "1.0.0" },
+      "sensors": { "vehicleDistance": 12.5 },
+      "actuators": { "streetLight": "ON" },
+      "commands": { "streetLight": "OFF" },
+      "settings": { "autoMode": true, "nearThreshold": 20, "lightOffDelay": 5 },
       "status": { "lastSeen": 1795000000000, "rssi": -61, "ip": "192.168.1.23" }
     },
-    "alarm_module": {
-      "info": { "name": "Smart Alarm", "owner": "Example", "type": "alarm", "firmware": "1.0.0" },
-      "sensors": { "gasLevel": 3100, "flame": false },
-      "actuators": { "buzzer": "ON" },
-      "commands": { "buzzer": "OFF" },
-      "settings": { "armed": true, "gasThreshold": 2500 },
-      "status": { "lastSeen": 1795000000000 }
+    "parking_module": {
+      "info": { "name": "Smart Parking", "owner": "Example", "type": "parking", "firmware": "1.0.0" },
+      "sensors": {
+        "slot1Distance": 4.2, "slot2Distance": 5.1, "slot3Distance": 3.8, "gateDistance": 6.0,
+        "slot1Occupied": true, "slot2Occupied": true, "slot3Occupied": true,
+        "carAtGate": true, "freeSlots": 0
+      },
+      "actuators": { "slot1Led": "ON", "slot2Led": "ON", "slot3Led": "ON", "gate": "CLOSED" },
+      "commands": { "gate": "CLOSED" },
+      "settings": { "autoMode": true, "occupiedDistance": 8, "gateOpenTime": 5 },
+      "status": { "lastSeen": 1795000000000, "rssi": -70 }
     }
   },
   "alerts": {
     "-SampleAlert0001": {
-      "moduleId": "alarm_module",
-      "type": "gas",
-      "severity": "critical",
-      "message": "Gas level 3100 above threshold 2500",
+      "moduleId": "parking_module",
+      "type": "parkingFull",
+      "severity": "info",
+      "message": "All 3 parking slots are occupied",
+      "timestamp": 1795000000000,
+      "acknowledged": false
+    },
+    "-SampleAlert0002": {
+      "moduleId": "parking_module",
+      "type": "gateBlocked",
+      "severity": "warning",
+      "message": "A car is waiting at the gate but the parking is full",
       "timestamp": 1795000000000,
       "acknowledged": false
     }
