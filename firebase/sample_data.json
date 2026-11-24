@@ -1,0 +1,30 @@
+{
+  "devices": {
+    "climate_module": {
+      "info": { "name": "Smart Climate", "owner": "Example", "type": "climate", "firmware": "1.0.0" },
+      "sensors": { "temperature": 27.4, "humidity": 51 },
+      "actuators": { "fan": "OFF", "led": "ON" },
+      "commands": { "fan": "OFF", "led": "ON" },
+      "settings": { "autoMode": true, "tempThreshold": 35 },
+      "status": { "lastSeen": 1795000000000, "rssi": -61, "ip": "192.168.1.23" }
+    },
+    "alarm_module": {
+      "info": { "name": "Smart Alarm", "owner": "Example", "type": "alarm", "firmware": "1.0.0" },
+      "sensors": { "gasLevel": 3100, "flame": false },
+      "actuators": { "buzzer": "ON" },
+      "commands": { "buzzer": "OFF" },
+      "settings": { "armed": true, "gasThreshold": 2500 },
+      "status": { "lastSeen": 1795000000000 }
+    }
+  },
+  "alerts": {
+    "-SampleAlert0001": {
+      "moduleId": "alarm_module",
+      "type": "gas",
+      "severity": "critical",
+      "message": "Gas level 3100 above threshold 2500",
+      "timestamp": 1795000000000,
+      "acknowledged": false
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "rules": {
+    "devices": {
+      ".read": "auth != null",
+      "$moduleId": {
+        ".validate": "$moduleId.matches(/^[a-z0-9_]+_module$/)",
+
+        "info": {
+          ".write": "auth != null && auth.token.email == 'devices@iosphere.app'",
+          "name": { ".validate": "newData.isString()" },
+          "owner": { ".validate": "newData.isString()" },
+          "type": { ".validate": "newData.isString()" },
+          "firmware": { ".validate": "newData.isString()" },
+          "$other": { ".validate": false }
+        },
+
+        "sensors": {
+          ".write": "auth != null && auth.token.email == 'devices@iosphere.app'",
+          "$sensorName": { ".validate": "newData.isNumber() || newData.isBoolean() || newData.isString()" }
+        },
+
+        "actuators": {
+          ".write": "auth != null && auth.token.email == 'devices@iosphere.app'",
+          "$actuatorName": { ".validate": "newData.isNumber() || newData.isBoolean() || newData.isString()" }
+        },
+
+        "commands": {
+          ".write": "auth != null",
+          "$commandName": { ".validate": "newData.isNumber() || newData.isBoolean() || newData.isString()" }
+        },
+
+        "settings": {
+          ".write": "auth != null && auth.token.email != 'devices@iosphere.app'",
+          "$settingName": { ".validate": "newData.isNumber() || newData.isBoolean() || newData.isString()" }
+        },
+
+        "status": {
+          ".write": "auth != null && auth.token.email == 'devices@iosphere.app'",
+          "lastSeen": { ".validate": "newData.isNumber() && newData.val() <= now + 60000" },
+          "rssi": { ".validate": "newData.isNumber()" },
+          "ip": { ".validate": "newData.isString()" },
+          "$other": { ".validate": false }
+        },
+
+        "$other": { ".validate": false }
+      }
+    },
+
+    "alerts": {
+      ".read": "auth != null",
+      ".indexOn": ["timestamp", "moduleId"],
+      "$alertId": {
+        ".write": "auth != null && auth.token.email == 'devices@iosphere.app' && !data.exists()",
+        ".validate": "newData.hasChildren(['moduleId', 'type', 'severity', 'message', 'timestamp', 'acknowledged'])",
+        "moduleId": { ".validate": "newData.isString()" },
+        "type": { ".validate": "newData.isString()" },
+        "severity": { ".validate": "newData.isString() && newData.val().matches(/^(critical|warning|info)$/)" },
+        "message": { ".validate": "newData.isString()" },
+        "timestamp": { ".validate": "newData.isNumber()" },
+        "acknowledged": {
+          ".write": "auth != null && auth.token.email != 'devices@iosphere.app'",
+          ".validate": "newData.isBoolean()"
+        },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "history": {
+      ".read": "auth != null",
+      "$moduleId": {
+        "$sensorName": {
+          ".indexOn": ["timestamp"],
+          "$entryId": {
+            ".write": "auth != null && auth.token.email == 'devices@iosphere.app' && (!data.exists() || !newData.exists())",
+            ".validate": "newData.hasChildren(['value', 'timestamp'])",
+            "value": { ".validate": "newData.isNumber() || newData.isBoolean()" },
+            "timestamp": { ".validate": "newData.isNumber()" },
+            "$other": { ".validate": false }
+          }
+        }
+      }
+    },
+
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": false
+      }
+    }
+  }
+}

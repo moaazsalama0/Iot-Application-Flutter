@@ -1,1 +1,30 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"iosphere-643dc","appId":"1:60014844362:android:08e9a102492fdb1eb81733","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"iosphere-643dc","configurations":{"android":"1:60014844362:android:08e9a102492fdb1eb81733","ios":"1:60014844362:ios:0b9e86a7bba39ff1b81733"}}}}}}
+{
+  "database": {
+    "rules": "firebase/database.rules.json"
+  },
+  "emulators": {
+    "auth": { "port": 9099 },
+    "database": { "port": 9000 },
+    "ui": { "enabled": true }
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "iosphere-643dc",
+          "appId": "1:60014844362:android:08e9a102492fdb1eb81733",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "iosphere-643dc",
+          "configurations": {
+            "android": "1:60014844362:android:08e9a102492fdb1eb81733",
+            "ios": "1:60014844362:ios:0b9e86a7bba39ff1b81733"
+          }
+        }
+      }
+    }
+  }
+}
