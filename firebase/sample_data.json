@@ -3,7 +3,7 @@
     "pedestrian_module": {
       "info": { "name": "Pedestrian Crossing", "owner": "Example", "type": "pedestrian", "firmware": "1.0.0" },
       "sensors": { "crossRequest": false, "pedestrianDetected": true },
-      "actuators": { "walkSignal": "WALK" },
+      "actuators": { "walkSignal": "WALK", "carLight": "RED" },
       "commands": { "walkSignal": "STOP" },
       "settings": { "autoMode": true, "crossingTime": 10 },
       "status": { "lastSeen": 1795000000000, "rssi": -58 }
@@ -23,7 +23,7 @@
         "slot1Occupied": true, "slot2Occupied": true, "slot3Occupied": true,
         "carAtGate": true, "freeSlots": 0
       },
-      "actuators": { "slot1Led": "ON", "slot2Led": "ON", "slot3Led": "ON", "gate": "CLOSED" },
+      "actuators": { "slot1Led": "ON", "slot2Led": "ON", "slot3Led": "ON", "gate": "CLOSED", "lcdText": "FULL" },
       "commands": { "gate": "CLOSED" },
       "settings": { "autoMode": true, "occupiedDistance": 8, "gateOpenTime": 5 },
       "status": { "lastSeen": 1795000000000, "rssi": -70 }

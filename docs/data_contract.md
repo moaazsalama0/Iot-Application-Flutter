@@ -59,6 +59,7 @@ This is the single agreement between every ESP32 module and the Flutter app.
   |---|---|
   | On/off devices (LEDs, street light) | `"ON"` / `"OFF"` |
   | Pedestrian signal | `"WALK"` / `"STOP"` |
+  | Car traffic light | `"RED"` / `"YELLOW"` / `"GREEN"` |
   | Gate (servo) | `"OPEN"` / `"CLOSED"` |
 
 ---
@@ -175,12 +176,19 @@ In every module:
 | sensors | `crossRequest` | bool | push button: a pedestrian asks to cross |
 | sensors | `pedestrianDetected` | bool | PIR / IR sensor: a person is waiting at the crossing |
 | actuators, commands | `walkSignal` | `"WALK"` / `"STOP"` | pedestrian LEDs: green = WALK, red = STOP |
+| actuators | `carLight` | `"RED"` / `"YELLOW"` / `"GREEN"` | car traffic light LEDs |
 | settings | `autoMode` | bool | |
 | settings | `crossingTime` | number, s | how long WALK stays on |
 
-**Automation:**
-1. While `walkSignal = "STOP"`: `crossRequest` **or** `pedestrianDetected` → `walkSignal = "WALK"`.
-2. After `crossingTime` seconds → `walkSignal = "STOP"`.
+`carLight` is **reported only**: the app never commands it. The ESP32 always sets it to match `walkSignal`, so the app can't create an unsafe state like cars GREEN while pedestrians WALK. The yellow phase has a fixed length, set in the ESP32 code.
+
+**Automation (crossing sequence):**
+1. Normal state: `carLight = "GREEN"`, `walkSignal = "STOP"`.
+2. `crossRequest` **or** `pedestrianDetected` → `carLight = "YELLOW"` for the fixed yellow time → `carLight = "RED"`.
+3. Once cars are RED → `walkSignal = "WALK"` for `crossingTime` seconds.
+4. Then → `walkSignal = "STOP"`, then `carLight = "GREEN"`.
+
+**Manual mode** (`autoMode = false`): when the app sends `walkSignal = "WALK"`, the ESP32 runs steps 2–3 (cars YELLOW → RED, then WALK). When the app sends `"STOP"`, it runs step 4.
 
 ### 6.2 Smart Street Lighting: `lighting_module`
 `info.type = "lighting"`
@@ -208,6 +216,7 @@ In every module:
 | sensors | `carAtGate` | bool | worked out by the ESP32: `gateDistance` < `occupiedDistance` |
 | sensors | `freeSlots` | number, 0–3 | worked out by the ESP32 |
 | actuators | `slot1Led`, `slot2Led`, `slot3Led` | `"ON"` / `"OFF"` | one LED per slot, ON while a car is parked there |
+| actuators | `lcdText` | string, exactly one of the 4 texts below | LCD at the entrance |
 | actuators, commands | `gate` | `"OPEN"` / `"CLOSED"` | servo barrier |
 | settings | `autoMode` | bool | |
 | settings | `occupiedDistance` | number, cm | a slot (or the gate) is occupied when the distance is below this |
@@ -217,6 +226,14 @@ In every module:
 1. Each slot LED follows its slot: `slotNOccupied` → `slotNLed = "ON"`, otherwise `"OFF"`. The slot LEDs always follow the sensors; the app can't control them.
 2. `carAtGate` **and** `freeSlots > 0` → `gate = "OPEN"` for `gateOpenTime`, then `"CLOSED"`.
 3. `freeSlots == 0` → the gate stays `"CLOSED"`.
+4. The LCD always shows the text for the current `freeSlots`, and the ESP32 reports the same text in `actuators/lcdText`. The app shows it but can't change it.
+
+   | `freeSlots` | LCD text / `lcdText` |
+   |---|---|
+   | 0 | `"FULL"` |
+   | 1 | `"1 slot available"` |
+   | 2 | `"2 slots available"` |
+   | 3 | `"3 slots available"` |
 
 ### 6.4 Alerts
 
